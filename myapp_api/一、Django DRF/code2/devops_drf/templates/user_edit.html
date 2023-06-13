@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>编辑用户</title>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+</head>
+<body>
+<h2>编辑用户</h2>
+<form action="#">
+    <input type="text" name="id" value="{{ user.id }}" style="display: none">
+    姓名：<input type="text" name="name" value="{{ user.name }}"><br>
+    城市：<input type="text" name="city" value="{{ user.city }}"><br>
+    性别：<input type="text" name="sex" value="{{ user.sex }}"><br>
+    年龄：<input type="text" name="age" value="{{ user.age }}"><br>
+    <input type="button" value="提交" id="btn">
+</form>
+<script>
+    // 已有数据渲染：通过id向后端api请求获取用户数据【GET】
+    // 提交数据：点击提交，获取输入的值，发送给后端【PUT】
+    $('#btn').click(function () {
+        // 先获取输入的值
+        var id = $('input[name=id]').val();
+        var name = $('input[name=name]').val();
+        var city = $('input[name=city]').val();
+        var sex = $('input[name=sex]').val();
+        var age = $('input[name=age]').val();
+        var data = {'id': id, 'name': name, 'city': city, 'sex': sex, 'age': age};
+        $.ajax({
+            type: 'PUT',
+            url: '/myapp/user/',
+            data: data,
+            success: function (result) {
+                if (result.code == 200) {
+                    alert('更新用户成功');
+                } else {
+                    alert('更新用户失败！')
+                }
+            },
+            error: function () {
+                alert('服务器接口异常！')
+            }
+        })
+    })
+
+
+</script>
+</body>
+</html>

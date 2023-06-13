@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户信息管理</title>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+</head>
+<body>
+<h2>用户信息管理</h2>
+<button><a href="/myapp/user_add" target="_blank">创建用户</a></button>
+<table border="1">
+    <thead>
+        <tr>
+            <th style="display: none">ID</th>
+            <th>姓名</th>
+            <th>城市</th>
+            <th>性别</th>
+            <th>年龄</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for i in user_list %}
+        <tr>
+            <td style="display: none">{{ i.id }}</td>
+            <td>{{ i.name }}</td>
+            <td>{{ i.city }}</td>
+            <td>{{ i.sex }}</td>
+            <td>{{ i.age }}</td>
+            <td>
+                <button><a href="/myapp/user_edit?id={{ i.id }}" target="_blank">编辑</a></button>
+                <button onclick="delUser(this)">删除</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<script>
+    function delUser(obj) {
+        confirm = confirm('是否删除该用户？');
+        if (confirm) {
+            id = $(obj).parent().parent().find("td:eq(0)").text();
+            console.log(id);
+            data = {'id': id};
+            $.ajax({
+                type: 'DELETE',
+                url: '/myapp/user/',
+                data: data,
+                success: function (result) {
+                    if (result.code == 200) {
+                        alert('删除用户成功');
+                        location.reload();
+                    } else {
+                        alert('删除用户失败！')
+                    }
+                },
+                error: function () {
+                    alert('服务器接口异常！')
+                }
+            })
+        }
+    }
+</script>
+</body>
+</html>

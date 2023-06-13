@@ -1,8 +1,7 @@
-"""
-URL configuration for django_demo project.
+"""devops_drf URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.2/topics/http/urls/
+    https://docs.djangoproject.com/en/3.2/topics/http/urls/
 Examples:
 Function views
     1. Add an import:  from my_app import views
@@ -15,10 +14,17 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, re_path
-from django.conf.urls import include
+from django.urls import path, include
+from rest_framework.authtoken import views
+from . import token_auth
+from rest_framework_swagger.views import get_swagger_view
+schema_view = get_swagger_view(title="接口文档")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('myapp_api/', include(myapp_api.urls))
+    path('myapp/', include('myapp.urls')),
+    path('myapp_api/', include('myapp_api.urls')),
+    # path('api-token-auth/', views.obtain_auth_token),
+    path('api-token-auth/', token_auth.CustomAuthToken.as_view()),
+    path('docs/', schema_view)
 ]
